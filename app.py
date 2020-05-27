@@ -7,7 +7,7 @@ import os, urllib
 def main():
     # Render the readme as markdown using st.markdown.
     readme_text = st.markdown(get_file_content_as_string("instructions.md"))
-    href = ''' <a href="./paper.pdf" download="paper">Download Base Paper</a>'''
+    href = ''' <a href="https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/paper.pdf" download="paper">Download Base Paper</a>'''
     st.write(href,unsafe_allow_html=True)
 
     # Once we have the dependencies, add a selector for the app mode on the sidebar.
