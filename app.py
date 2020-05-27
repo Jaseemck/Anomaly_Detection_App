@@ -1,7 +1,4 @@
 import streamlit as st
-import matplotlib
-matplotlib.use('Agg')
-from matplotlib import pyplot as plt
 import pandas as pd
 import os
 from PIL import Image,ImageEnhance

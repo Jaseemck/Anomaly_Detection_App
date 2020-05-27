@@ -1,4 +1,4 @@
-#!/home/jesi/Desktop/The_incomplete_projects/Streamlit/env/bin/python3
+#!/home/jesi/Desktop/The_incomplete_projects/Anomaly_Detection_App/env/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

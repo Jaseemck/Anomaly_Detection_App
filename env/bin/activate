@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/jesi/Desktop/The_incomplete_projects/Streamlit/env"
+VIRTUAL_ENV="/home/jesi/Desktop/The_incomplete_projects/Anomaly_Detection_App/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

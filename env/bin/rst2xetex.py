@@ -1,4 +1,4 @@
-#!/home/jesi/Desktop/The_incomplete_projects/Streamlit/env/bin/python3
+#!/home/jesi/Desktop/The_incomplete_projects/Anomaly_Detection_App/env/bin/python3
 
 # $Id: rst2xetex.py 7847 2015-03-17 17:30:47Z milde $
 # Author: Guenter Milde
