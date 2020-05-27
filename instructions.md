@@ -1,11 +1,8 @@
-# Streamlit Demo: The Udacity Self-driving Car Image Browser
+# Anomaly Detection in IoT Devices
 
-This project demonstrates the [Udacity self-driving-car dataset](https://github.com/udacity/self-driving-car) and [YOLO object detection](https://pjreddie.com/darknet/yolo) into an interactive [Streamlit](https://streamlit.io) app.
+This project demonstrates the [kaggle IoT dataset](( https://www.kaggle.com/francoisxa/ds2ostraffictraces ).) and [KDD cup dataset](https://kdd.ics.uci.edu/databases/kddcup99/kddcup99.html) into an interactive [Streamlit](https://streamlit.io) app.
 
-The complete demo is [implemented in less than 300 lines of Python](https://github.com/streamlit/demo-self-driving/blob/master/app.py) and illustrates all the major building blocks of Streamlit.
 
-👈 **Please select _Run the App_ in the sidebar to start.**
+👈 **Please select options in the sidebar to explore and run the app.**
 
-### Questions? Comments?
-
-Please ask in the [Streamlit community](https://discuss.streamlit.io).
+### Under Construction
