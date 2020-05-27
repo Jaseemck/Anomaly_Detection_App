@@ -7,6 +7,8 @@ import os, urllib
 def main():
     # Render the readme as markdown using st.markdown.
     readme_text = st.markdown(get_file_content_as_string("instructions.md"))
+    href = ''' <a href="./paper.pdf" download="paper">Download Base Paper</a>'''
+    st.write(href,unsafe_allow_html=True)
 
     # Once we have the dependencies, add a selector for the app mode on the sidebar.
     st.sidebar.title("Anomaly Detection in IoT Devices")
@@ -15,8 +17,7 @@ def main():
         ["Show instructions", "EDA of Kaggle dataset", "EDA of KDD cup dataset", "Show the source code"])
     if app_mode == "Show instructions":
         st.sidebar.success('To view EDA of datasets, select "EDA of {} dataset".')
-        st.sidebar.success('To view the source of the file, select "Show the Source Code".')
-        st.sidebar.success('To continue select "Run the app".')
+        st.sidebar.success('To view the sourcecode of the file, select "Show the Source Code".')
     elif app_mode == "Show the source code":
         readme_text.empty()
         st.code(get_file_content_as_string("app.py"))
@@ -26,10 +27,12 @@ def main():
     elif app_mode == "EDA of KDD cup dataset":
         readme_text.empty()
         eda_kdd()
+    
+
 
 @st.cache(show_spinner=False)
 def get_file_content_as_string(path):
-    url = 'https://raw.githubusercontent.com/Jaseemck/Anomaly_Detection_App' + path
+    url = 'https://raw.githubusercontent.com/Jaseemck/Anomaly_Detection_App/master/' + path
     response = urllib.request.urlopen(url)
     return response.read().decode("utf-8")
 
