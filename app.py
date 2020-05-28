@@ -6,18 +6,17 @@ import os, urllib
 import pickle
 import sklearn
 import numpy as np
+import random
 
 def main():
     # Render the readme as markdown using st.markdown.
     readme_text = st.markdown(get_file_content_as_string("instructions.md"))
-    #href = ''' <a href="https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/paper.pdf" download="paper">Download Base Paper</a>'''
-    #st.write(href,unsafe_allow_html=True)
 
     # Once we have the dependencies, add a selector for the app mode on the sidebar.
     st.sidebar.title("Anomaly Detection in IoT Devices")
     st.sidebar.title("Group-4")
     app_mode = st.sidebar.selectbox("Choose the app mode",
-        ["Show instructions", "EDA of Kaggle dataset", "EDA of KDD cup dataset", "Show the source code","Temp Anomaly Detection"])
+        ["Show instructions", "EDA of Kaggle dataset", "EDA of KDD cup dataset", "Show the source code","Temp Anomaly Detection","Anomaly Detection System"])
     if app_mode == "Show instructions":
         st.sidebar.success('To view EDA of datasets, select "EDA of {} dataset".')
         st.sidebar.success('To view the sourcecode of the file, select "Show the Source Code".')
@@ -34,6 +33,12 @@ def main():
         readme_text.empty()
         st.sidebar.info('The Temperature Sensor data is taken from Raspberry pi. The anomalous temperatures are added manually.')
         tmp_anm()
+    elif app_mode == "Anomaly Detection System":
+        readme_text.empty()
+        st.sidebar.info('If you Button press the button, Normality of a random row in the test dataset will be predicted using the model')
+        system()
+
+#---------------------------------------------------------------------------------------------------
     
 def ValuePredictor(to_predict_list):
     to_predict = np.array(to_predict_list).reshape(1,11)
@@ -41,10 +46,11 @@ def ValuePredictor(to_predict_list):
     result = loaded_model.predict(to_predict)
     return result[0]
 
+#---------------------------------------------------------------------------------------------------
+
 def tmp_anm():
     st.title("Temperature Reading Anomaly Detection Taken from Raspberry Pi")
     st.subheader("Group-4")
-    st.write("hai")
     
     html_temp = """
     <div style="background-color:tomato;padding:15px;">
@@ -62,11 +68,45 @@ def tmp_anm():
     if st.button("Detect"):
         st.text("Normality is {}".format(prediction.title()))
 
+#----------------------------------------------------------------------------------------------------
+
+def system():
+    st.title("Anomaly Detection in IoT Devices")
+    st.subheader("Group-4")
+    dataset = 'new_data.csv'
+    @st.cache(persist=True)
+    def explore_data(dataset):
+        df = pd.read_csv(os.path.join(dataset))
+        return df
+
+    data = explore_data(dataset)
+    
+    html_temp = """
+    <div style="background-color:tomato;padding:15px;">
+    <h2> Classification App </h2>
+    </div><br><br>
+    """
+    st.markdown(html_temp, unsafe_allow_html=True)
+    temp = random.randrange(0, 456556)
+    to_predict_list= data.iloc[temp,2:]
+    to_predict_list = list(map(float, to_predict_list))
+    result = ValuePredictor(to_predict_list)
+    prediction = str(result)
+
+    if st.button("Detect"):
+        st.text(temp)
+        st.text(prediction.title())
+        st.text(data.shape)
+
+#---------------------------------------------------------------------------------------------------
+
 @st.cache(show_spinner=False)
 def get_file_content_as_string(path):
     url = 'https://raw.githubusercontent.com/Jaseemck/Anomaly_Detection_App/master/' + path
     response = urllib.request.urlopen(url)
     return response.read().decode("utf-8")
+
+#---------------------------------------------------------------------------------------------------
 
 def eda_kaggle():
     st.title("Anomaly Detection in IoT Devices")
@@ -74,7 +114,7 @@ def eda_kaggle():
     st.subheader("Kaggle IoT Dataset")
     dataset1 = 'kaggle_iot_dataset.csv'
     @st.cache(persist=True)
-    def explore_data(dataset):
+    def explore_data(dataset1):
         df = pd.read_csv(os.path.join(dataset))
         return df
 
@@ -217,6 +257,8 @@ def eda_kdd():
         attacks_img = Image.open("attacks.png")
         attacks_width = st.slider("Set Image Width of attacks Graph",500,800)
         st.image(attacks_img,width=attacks_width)
+
+#-----------------------------------------------------------------------------------------------------
 
     
 if __name__ == "__main__":
