@@ -23,7 +23,7 @@ def main():
         st.sidebar.success('To view the sourcecode of the file, select "Show the Source Code".')
     elif app_mode == "Show the source code":
         readme_text.empty()
-        st.code(get_file_content_as_string("app.py"))
+        st.code(get_file_content_as_string("anomaly_detection_fl.py"))
     elif app_mode == "EDA of Kaggle dataset":
         readme_text.empty()
         eda_kaggle()
