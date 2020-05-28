@@ -3,18 +3,21 @@ import pandas as pd
 import os
 from PIL import Image,ImageEnhance
 import os, urllib
+import pickle
+import sklearn
+import numpy as np
 
 def main():
     # Render the readme as markdown using st.markdown.
     readme_text = st.markdown(get_file_content_as_string("instructions.md"))
-    href = ''' <a href="https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/paper.pdf" download="paper">Download Base Paper</a>'''
-    st.write(href,unsafe_allow_html=True)
+    #href = ''' <a href="https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/paper.pdf" download="paper">Download Base Paper</a>'''
+    #st.write(href,unsafe_allow_html=True)
 
     # Once we have the dependencies, add a selector for the app mode on the sidebar.
     st.sidebar.title("Anomaly Detection in IoT Devices")
     st.sidebar.title("Group-4")
     app_mode = st.sidebar.selectbox("Choose the app mode",
-        ["Show instructions", "EDA of Kaggle dataset", "EDA of KDD cup dataset", "Show the source code"])
+        ["Show instructions", "EDA of Kaggle dataset", "EDA of KDD cup dataset", "Show the source code","Temp Anomaly Detection"])
     if app_mode == "Show instructions":
         st.sidebar.success('To view EDA of datasets, select "EDA of {} dataset".')
         st.sidebar.success('To view the sourcecode of the file, select "Show the Source Code".')
@@ -27,8 +30,37 @@ def main():
     elif app_mode == "EDA of KDD cup dataset":
         readme_text.empty()
         eda_kdd()
+    elif app_mode == "Temp Anomaly Detection":
+        readme_text.empty()
+        st.sidebar.info('The Temperature Sensor data is taken from Raspberry pi. The anomalous temperatures are added manually.')
+        tmp_anm()
     
+def ValuePredictor(to_predict_list):
+    to_predict = np.array(to_predict_list).reshape(1,11)
+    loaded_model = pickle.load(open("model_demo.pkl","rb"))
+    result = loaded_model.predict(to_predict)
+    return result[0]
 
+def tmp_anm():
+    st.title("Temperature Reading Anomaly Detection Taken from Raspberry Pi")
+    st.subheader("Group-4")
+    st.write("hai")
+    
+    html_temp = """
+    <div style="background-color:tomato;padding:15px;">
+    <h2> Classification App </h2>
+    </div>
+    """
+    st.markdown(html_temp, unsafe_allow_html=True)
+    #temp = st.number_input("Enter Temp")
+    temp = st.slider("Set Temperature",-100,200)
+    to_predict_list= [61,4,8,11,2,6,11,5,11,1,temp]
+    to_predict_list = list(map(float, to_predict_list))
+    result = ValuePredictor(to_predict_list)
+    prediction = str(result)
+
+    if st.button("Detect"):
+        st.text("Normality is {}".format(prediction.title()))
 
 @st.cache(show_spinner=False)
 def get_file_content_as_string(path):
