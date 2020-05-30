@@ -1,20 +1,20 @@
 # Anomaly Detection in IoT Devices
 
-###Importance of Security in IoT devices
+### Importance of Security in IoT devices
 Cyberattacks in the Internet of Things(IoT) platform is a rising concern in the domain of IoT. IoT devices are increasingly used in smart homes, autonomous vehicles and smart appliances these days. Confidential data’s are involved in these applications. Hence the threats and attacks can have serious
 consequences. Federated learning (FL) is a family of Machine Learning algorithms introduced by Google in 2016. In a network that consists of edge nodes connected to the central server, each of the nodes trains a local model and only that model is shared with the server, not the data. This is the core idea of federated learning. Hence privacy is preserved. The concept of federated learning can ultimately transform the ideology of privacy in the internet.
 
-###Federated Learning
+### Federated Learning
 Federated learning is a machine learning technique where the connected devices collect data participates in training the central machine learning model. This technique is most popular with systems deployed at scale. Federated learning is used where the data should not be shared with the cloud but requires information and analysis from the data at hand. This method is used where confidential data are involved and is ideal for edge devices. Personalized keyboards on smartphones are one of the areas where it is first implemented. GBoard application is one example. The predictive features on those personalized keyboards learn from features such as your typing patterns, usage of words, slangs to give you better suggestions in the future. But the keyboard is used to type many private and confidential data. So, it is not secure to send those data directly to the cloud. Then it would be privacy invasion and a lot of our personal stuff can be leaked and misused.
 
-![[What is Federated Learning?](https://raw.githubusercontent.com/Jaseemck/Anomaly_Detection_App/master/flpic1.jpeg)]](https://www.youtube.com/watch?v=wOAkaxiCYnM)
+[![What is Federated Learning?](https://raw.githubusercontent.com/Jaseemck/Anomaly_Detection_App/master/flpic1.jpeg)](https://www.youtube.com/watch?v=wOAkaxiCYnM)
 
 The basic working of federated learning is as follows. Machine learning models are trained on your edge devices and then the stuff which can be either weights in neural networks or other types of machine learning models, are the only ones sent to the central server. Now the central server averages those stuff which it receives from connected edge devices and then uses them to train its central machine learning model. After it undergoes training up to some epochs, that central machine learning model is distributed back to the devices to be used for predictive purposes or for further training. In traditional machine learning approach, training a neural network would require to have a single copy of the model and all of the training data in one place. But in reality, data is mostly gathered across an array of sensors. In those scenarios, all sensor data would have to be sent to a central server fortraining and the resulting network weights distributed back to the sensors. However, these sensors often have limited bandwidth and intermittent connections to the central server.
 
 ![](https://raw.githubusercontent.com/Jaseemck/Anomaly_Detection_App/master/FLmodel.gif)
 
-```
-###Introduction to Pysyft
+
+### Introduction to Pysyft
 PySyft is a Python library for secure and private deep learning. PySyft requires Python >= 3.6 and PyTorch 1.1.0.
 
 ```
@@ -30,7 +30,7 @@ We can perform federated learning on client devices by following these steps:
 * do normal training using the data present on the device,
 * get back the smarter model.
 
-###Federated Learning using PySyft
+### Federated Learning using PySyft
 
 Here, we implement the federated learning approach to train a simple neural network on the MNIST dataset using the two workers: Raj and kaif.
 
@@ -153,4 +153,4 @@ That’s it. We have trained a model using the federated learning approach.
 
 More Tutorial are available [here](https://github.com/OpenMined/PySyft/tree/master/examples/tutorials)
 
-Download our paper on Role of [Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/Final Paper.pdf)
+**Download our paper on Role of [Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/Final Paper.pdf)**

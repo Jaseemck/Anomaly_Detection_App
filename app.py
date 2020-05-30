@@ -21,6 +21,7 @@ def main():
         st.sidebar.success('To view EDA of datasets, select "EDA of {} dataset".')
         st.sidebar.success('To view the sourcecode of the file, select "Show the Source Code".')
     elif app_mode == "Federated Learning Approach":
+        readme_text.empty()
         st.sidebar.success('Explore the Approach of Anomaly Detection using Federated Learning')
         fl_text = st.markdown(get_file_content_as_string("federated_learning.md"))
     elif app_mode == "Show the source code":
