@@ -111,7 +111,7 @@ for epoch in range(0, 5):
                 loss.item()))
 ```
 
-
+OUTPUT
 ```
 Epoch:  1 [    0/60032 (  0%)]	Loss: 2.306809
 Epoch:  1 [ 6400/60032 ( 11%)]	Loss: 1.439327
@@ -158,4 +158,4 @@ That’s it. We have trained a model using the federated learning approach.
 *More Tutorial are available *[here](https://github.com/OpenMined/PySyft/tree/master/examples/tutorials)
 
 
-**Download our paper on Role of **[Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/FinalPaper.pdf)
+Download our paper on Role of [Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/FinalPaper.pdf)
