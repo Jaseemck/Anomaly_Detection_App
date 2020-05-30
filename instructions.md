@@ -13,9 +13,9 @@ __Assistant professor, NSSCE__
 
 ## Contributors
 
-Jithin T Chandran<br />
-Pranoy P Sundar<br />
-Sidheeque Fasal C P A<br />
+Jithin T Chandran<br>
+Pranoy P Sundar__
+Sidheeque Fasal C P A_
 Jaseem C K
 
 **Computer Science and Engineering Department NSSCE**
