@@ -16,10 +16,13 @@ def main():
     st.sidebar.title("Anomaly Detection in IoT Devices")
     st.sidebar.title("Group-4")
     app_mode = st.sidebar.selectbox("Choose the app mode",
-        ["Show instructions", "EDA of Kaggle dataset", "EDA of KDD cup dataset", "Show the source code","Temp Anomaly Detection","Anomaly Detection System"])
+        ["Show instructions","Federated Learning Approach","EDA of Kaggle dataset", "EDA of KDD cup dataset","Temp Anomaly Detection","Anomaly Detection System","Show the source code"])
     if app_mode == "Show instructions":
         st.sidebar.success('To view EDA of datasets, select "EDA of {} dataset".')
         st.sidebar.success('To view the sourcecode of the file, select "Show the Source Code".')
+    elif app_mode == "Federated Learning Approach":
+        st.sidebar.success('Explore the Approach of Anomaly Detection using Federated Learning')
+        fl_text = st.markdown(get_file_content_as_string("federated_learning.md"))
     elif app_mode == "Show the source code":
         readme_text.empty()
         st.code(get_file_content_as_string("anomaly_detection_fl.py"))
@@ -36,8 +39,9 @@ def main():
     elif app_mode == "Anomaly Detection System":
         readme_text.empty()
         st.sidebar.info('If you Button press the button, Normality of a random row in the test dataset will be predicted using the model.')
-        st.sidebar.warning('For easy Loading only a adequate rows from the original Dataset is used. Most of the rows will have normality "Normal". Choose EDA of Kaggle dataset to know more.')
+        st.sidebar.warning('For easy Loading only a adequate rows from the original Dataset is used. Most of the rows will have normality "Normal". Choose EDA of Kaggle dataset app mode to know more.')
         system()
+
 
 #---------------------------------------------------------------------------------------------------
     
@@ -50,30 +54,32 @@ def ValuePredictor(to_predict_list):
 #---------------------------------------------------------------------------------------------------
 
 def tmp_anm():
-    st.title("Temperature Reading Anomaly Detection Taken from Raspberry Pi")
-    st.subheader("Group-4")
-    
-    html_temp = """
-    <div style="background-color:tomato;padding:15px;">
-    <h2> Classification App </h2>
-    </div>
-    """
-    st.markdown(html_temp, unsafe_allow_html=True)
-    #temp = st.number_input("Enter Temp")
-    temp = st.slider("Set Temperature",-100,200)
+    st.title("Anomaly Detection of Temperature Reading Taken from Raspberry Pi")
+    st.subheader("Choose a temperature from the below slider and click the detect button to predict the normality of the sensor reading.")    
+
+    temp = st.slider("Set a Temperature",-100,200)
     to_predict_list= [61,4,8,11,2,6,11,5,11,1,temp]
     to_predict_list = list(map(float, to_predict_list))
     result = ValuePredictor(to_predict_list)
     prediction = str(result)
 
     if st.button("Detect"):
-        st.text("Normality is {}".format(prediction.title()))
+        html_restemp1 = """
+        <div style="background-color:lightgreen;padding:15px;"><h3>Normal</h3>
+        </div>
+        """
+        html_restemp2 = """ 
+        <div style="background-color:#F63D45;padding:15px;"><h3>Anomalous</h3>
+        </div> """
+        if prediction == "normal":
+            st.markdown(html_restemp1, unsafe_allow_html=True)
+        else:
+            st.markdown(html_restemp2, unsafe_allow_html=True)
 
 #----------------------------------------------------------------------------------------------------
 
 def system():
-    st.title("Anomaly Detection in IoT Devices")
-    st.subheader("Group-4")
+    st.title("Anomaly Detection of Test dataset taken from Kaggle")
     dataset = 'new_data.csv'
     dataset1 = 'kaggle_iot_dataset.csv'
     @st.cache(persist=True)
@@ -83,21 +89,29 @@ def system():
 
     data = explore_data(dataset)
     data1 = explore_data(dataset1)
+
+    st.subheader("Click the button to Predict the normality of a communication in IoT device")
+    st.text("*The details of the prediction will be displayed once you click the button*")
     
-    html_temp = """
-    <div style="background-color:tomato;padding:15px;">
-    <h2> Classification App </h2>
-    </div><br><br>
-    """
-    st.markdown(html_temp, unsafe_allow_html=True)
     row = random.randrange(0, 250000)
     to_predict_list= data.iloc[row,2:]
     to_predict_list = list(map(float, to_predict_list))
     result = ValuePredictor(to_predict_list)
     prediction = str(result)
 
-    if st.button("Detect"):
-        st.subheader(prediction.title())
+    if st.button("Predict the Normality"):
+        html_restemp1 = """
+        <div style="background-color:lightgreen;padding:15px;"><h3>Normal</h3>
+        </div><br>
+        """
+        html_restemp2 = """ 
+        <div style="background-color:#F63D45;padding:15px;"><h3>Anomalous</h3>
+        </div><br> """
+        if prediction == "normal":
+            st.markdown(html_restemp1, unsafe_allow_html=True)
+        else:
+            st.markdown(html_restemp2, unsafe_allow_html=True)
+            st.subheader(prediction.title())
         st.write(data1.iloc[row,2:])
 
 #---------------------------------------------------------------------------------------------------
@@ -116,7 +130,7 @@ def eda_kaggle():
     st.subheader("Kaggle IoT Dataset")
     dataset1 = 'kaggle_iot_dataset.csv'
     @st.cache(persist=True)
-    def explore_data(dataset1):
+    def explore_data(dataset):
         df = pd.read_csv(os.path.join(dataset))
         return df
 
