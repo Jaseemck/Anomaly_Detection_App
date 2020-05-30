@@ -35,7 +35,8 @@ def main():
         tmp_anm()
     elif app_mode == "Anomaly Detection System":
         readme_text.empty()
-        st.sidebar.info('If you Button press the button, Normality of a random row in the test dataset will be predicted using the model')
+        st.sidebar.info('If you Button press the button, Normality of a random row in the test dataset will be predicted using the model.')
+        st.sidebar.warning('For easy Loading only a adequate rows from the original Dataset is used. Most of the rows will have normality "Normal". Choose EDA of Kaggle dataset to know more.')
         system()
 
 #---------------------------------------------------------------------------------------------------
@@ -74,12 +75,14 @@ def system():
     st.title("Anomaly Detection in IoT Devices")
     st.subheader("Group-4")
     dataset = 'new_data.csv'
+    dataset1 = 'kaggle_iot_dataset.csv'
     @st.cache(persist=True)
     def explore_data(dataset):
         df = pd.read_csv(os.path.join(dataset))
         return df
 
     data = explore_data(dataset)
+    data1 = explore_data(dataset1)
     
     html_temp = """
     <div style="background-color:tomato;padding:15px;">
@@ -87,16 +90,15 @@ def system():
     </div><br><br>
     """
     st.markdown(html_temp, unsafe_allow_html=True)
-    temp = random.randrange(0, 456556)
-    to_predict_list= data.iloc[temp,2:]
+    row = random.randrange(0, 250000)
+    to_predict_list= data.iloc[row,2:]
     to_predict_list = list(map(float, to_predict_list))
     result = ValuePredictor(to_predict_list)
     prediction = str(result)
 
     if st.button("Detect"):
-        st.text(temp)
-        st.text(prediction.title())
-        st.text(data.shape)
+        st.subheader(prediction.title())
+        st.write(data1.iloc[row,2:])
 
 #---------------------------------------------------------------------------------------------------
 
