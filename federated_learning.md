@@ -155,6 +155,7 @@ Test set: Average loss: 0.2428, Accuracy: 9300/10000 (93%)
 
 That’s it. We have trained a model using the federated learning approach.
 
-**More Tutorial are available **[here](https://github.com/OpenMined/PySyft/tree/master/examples/tutorials)
+*More Tutorial are available *[here](https://github.com/OpenMined/PySyft/tree/master/examples/tutorials)
+
 
 **Download our paper on Role of **[Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/FinalPaper.pdf)

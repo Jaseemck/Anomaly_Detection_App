@@ -9,7 +9,7 @@ This project demonstrates the EDA of [kaggle IoT dataset]( https://www.kaggle.co
 
 ## Guide in-charge
 Prof. Sruthy Manmadhan  
-__Assistant professor, NSSCE__
+*Assistant professor, NSSCE*
 
 ## Contributors
 
