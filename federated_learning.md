@@ -18,7 +18,7 @@ The basic working of federated learning is as follows. Machine learning models a
 PySyft is a Python library for secure and private deep learning. PySyft requires Python >= 3.6 and PyTorch 1.1.0.
 
 ```
-pip install syft
+!pip install syft
 import torch as torch
 import syft as sy
 hook = sy.TorchHook(torch)
@@ -34,7 +34,7 @@ We can perform federated learning on client devices by following these steps:
 
 Here, we implement the federated learning approach to train a simple neural network on the MNIST dataset using the two workers: Raj and kaif.
 
-```
+```python
 import torch
 import torchvision
 from torch import nn
@@ -45,7 +45,7 @@ from torchvision import datasets, transforms
 
 In real-life applications, the data is present on client devices. To replicate the scenario, we send data to the **VirtualWorkers**.
 
-```
+```python
 transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.5, ), (0.5, )),
@@ -65,7 +65,7 @@ test_loader = torch.utils.data.DataLoader(
 ```
 The FederatedDataset class is intended to be used like the PyTorch’s Dataset class. Pass the created FederatedDataset to a federated data loader “FederatedDataLoader” to iterate over it in a federated manner. The batches then come from different devices.
 
-```
+```python
 class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
@@ -86,7 +86,7 @@ optimizer = optim.SGD(model.parameters(), lr=0.01)
 ```
 Since the data is present on the client device, we obtain its location through the location attribute. The important additions to the code are the steps to get back the improved model and the value of the loss from the client devices.
 
-```
+```python
 for epoch in range(0, 5):
     model.train()
     for batch_idx, (data, target) in enumerate(federated_train_loader):
@@ -111,6 +111,8 @@ for epoch in range(0, 5):
                 loss.item()))
 ```
 
+
+```
 Epoch:  1 [    0/60032 (  0%)]	Loss: 2.306809
 Epoch:  1 [ 6400/60032 ( 11%)]	Loss: 1.439327
 Epoch:  1 [12800/60032 ( 21%)]	Loss: 0.857306
@@ -124,8 +126,10 @@ Epoch:  5 [38400/60032 ( 64%)]	Loss: 0.135291
 Epoch:  5 [44800/60032 ( 75%)]	Loss: 0.202033
 Epoch:  5 [51200/60032 ( 85%)]	Loss: 0.303086
 Epoch:  5 [57600/60032 ( 96%)]	Loss: 0.130088
-
 ```
+
+
+```python
 model.eval()
 test_loss = 0
 correct = 0
@@ -151,6 +155,6 @@ Test set: Average loss: 0.2428, Accuracy: 9300/10000 (93%)
 
 That’s it. We have trained a model using the federated learning approach.
 
-More Tutorial are available [here](https://github.com/OpenMined/PySyft/tree/master/examples/tutorials)
+**More Tutorial are available **[here](https://github.com/OpenMined/PySyft/tree/master/examples/tutorials)
 
-**Download our paper on Role of [Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/Final Paper.pdf)**
+**Download our paper on Role of **[Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/FinalPaper.pdf)

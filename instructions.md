@@ -7,20 +7,18 @@ This project demonstrates the EDA of [kaggle IoT dataset]( https://www.kaggle.co
 [Download Base Paper](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/paper.pdf)
 
 
-### Guide in-charge
-**Prof. Sruthy Manmadhan**
-
+## Guide in-charge
+Prof. Sruthy Manmadhan\
 __Assistant professor, NSSCE__
 
-### Contributors
+## Contributors
 
-**Jithin T Chandran**
+Jithin T Chandran\
+Pranoy P Sundar\
+Sidheeque Fasal C P A\
+Jaseem C K
 
-**Pranoy P Sundar**
-
-**Sidheeque Fasal C P A**
-
-**Jaseem C K**
+**Computer Science and Engineering Department NSSCE**
 
 
 
