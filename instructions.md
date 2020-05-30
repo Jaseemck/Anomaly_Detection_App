@@ -4,9 +4,11 @@ This project demonstrates the [kaggle IoT dataset]( https://www.kaggle.com/franc
 
 [Download Base Paper](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/paper.pdf)
 
-
-[![Watch the video]<img src="https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg" width="50%">](https://youtu.be/T-D1KVIuvjA)
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=T-D1KVIuvjA" target="_blank">
+ <img src="http://img.youtube.com/vi/T-D1KVIuvjA/0.jpg" alt="Federated Learning" width="240" height="180" border="10" />
+</a>
 
 👈 **Please select options in the sidebar to explore and run the app.**
 
 ### Under Construction
+
