@@ -4,9 +4,9 @@ This project demonstrates the [kaggle IoT dataset]( https://www.kaggle.com/franc
 
 [Download Base Paper](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/paper.pdf)
 
-![test image size](https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg ){:height="50%" width="50%"}
+![test image size](https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg){width=500px}
 
-![](/FLmodel.gif)
+![](https://raw.githubusercontent.com/Jaseemck/Anomaly_Detection_App/master/FLmodel.gif)
 
 
 
