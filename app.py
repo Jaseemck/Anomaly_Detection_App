@@ -30,9 +30,9 @@ def main():
         readme_text.empty()
         if st.checkbox("Show Source Code"):
             if st.button("Using Kaggle Dataset"):
-                st.code(get_file_content_as_string("AD_using_FL_Kaggle.py"), language='Python')
+                st.code(get_file_content_as_string("ad_using_fl_kaggle.py"), language='Python')
             elif st.button("Using KDD Dataset"):
-                st.code(get_file_content_as_string("AD_using_FL_KDD.py"), language='Python')
+                st.code(get_file_content_as_string("ad_using_fl_kdd.py"), language='Python')
             else: 
                 st.write("Choose from the options above")
         st.markdown(get_file_content_as_string("pt_file.md"))
