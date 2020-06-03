@@ -19,14 +19,23 @@ def main():
         ["Show instructions","Federated Learning Approach","EDA of Kaggle dataset", "EDA of KDD cup dataset","Temp Anomaly Detection","Anomaly Detection System","Show the source code"])
     if app_mode == "Show instructions":
         st.sidebar.success('To view EDA of datasets, select "EDA of {} dataset".')
+        st.sidebar.success('To run the model, select "Anomaly Detection system" and "Temp Anomaly Detection".')
+        st.sidebar.success('To view the FL approach and the research paper associated, select "Federated Learning Approach".')
         st.sidebar.success('To view the sourcecode of the file, select "Show the Source Code".')
     elif app_mode == "Federated Learning Approach":
         readme_text.empty()
         st.sidebar.success('Explore the Approach of Anomaly Detection using Federated Learning')
-        fl_text = st.markdown(get_file_content_as_string("federated_learning.md"))
+        st.markdown(get_file_content_as_string("federated_learning.md"))
     elif app_mode == "Show the source code":
         readme_text.empty()
-        st.code(get_file_content_as_string("anomaly_detection_fl.py"))
+        if st.checkbox("Show Source Code"):
+            if st.button("Using Kaggle Dataset"):
+                st.code(get_file_content_as_string("AD_using_FL_Kaggle.ipynb"))
+            elif st.button("Using KDD Dataset"):
+                st.code(get_file_content_as_string("AD_using_FL_KDD.ipynb"))
+            else: 
+                pass
+        
     elif app_mode == "EDA of Kaggle dataset":
         readme_text.empty()
         eda_kaggle()
