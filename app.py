@@ -35,7 +35,7 @@ def main():
                 st.code(get_file_content_as_string("AD_using_FL_KDD.ipynb"))
             else: 
                 st.write("Choose from the options above")
-         st.markdown(get_file_content_as_string("pt_file.md"))
+        st.markdown(get_file_content_as_string("pt_file.md"))
         
     elif app_mode == "EDA of Kaggle dataset":
         readme_text.empty()
