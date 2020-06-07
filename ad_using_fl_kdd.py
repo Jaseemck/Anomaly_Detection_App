@@ -35,6 +35,8 @@ df = pd.read_csv("http://kdd.ics.uci.edu/databases/kddcup99/kddcup.data_10_perce
 
 df.head()
 
+df.shape
+
 import plotly.graph_objects as go
 from collections import Counter
 
@@ -93,6 +95,305 @@ print("Number of records in test data : ", X_test.shape)
 print("Total distinct number of threat types in training data : ",len(set(y_train)))
 print("Total distinct number of threat types in test data : ",len(set(y_test)))
 
+"""# **ML Models** (Naive Bayes)"""
+
+from sklearn.naive_bayes import GaussianNB
+gnb = GaussianNB()
+
+#Train the model using the training sets
+gnb.fit(X_train, y_train)
+
+#Predict the response for test dataset
+y_pred = gnb.predict(X_test)
+
+from sklearn.metrics import classification_report
+
+# Model Accuracy, how often is the classifier correct?
+print(classification_report(y_test, y_pred))
+
+# Accuracy
+from sklearn.metrics import accuracy_score
+print("Accuracy: ",accuracy_score(y_test, y_pred))# Recall
+from sklearn.metrics import recall_score
+print("Recall: ",recall_score(y_test, y_pred, average='weighted'))# Precision
+from sklearn.metrics import precision_score
+print("Precision: ",precision_score(y_test, y_pred, average='weighted'))
+
+
+
+"""# **ML Model**"""
+
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier()
+knn.fit(X_train, y_train)
+y_knn_pred = knn.predict(X_test)
+
+# Accuracy
+from sklearn.metrics import accuracy_score
+print("Accuracy: ",accuracy_score(y_test, y_knn_pred))# Recall
+from sklearn.metrics import recall_score
+print("Recall: ",recall_score(y_test, y_knn_pred, average='weighted'))# Precision
+from sklearn.metrics import precision_score
+print("Precision: ",precision_score(y_test, y_knn_pred, average='weighted'))
+
+"""# **Simple Neural Network**"""
+
+# Number of times we want to iterate over whole training data
+BATCH_SIZE = 1000
+EPOCHS = 20
+LOG_INTERVAL = 10
+lr = 0.01
+
+n_feature = X_train.shape[1]
+n_class = np.unique(y_train).shape[0]
+
+print("Number of training features : ",n_feature)
+print("Number of training classes : ",n_class)
+
+import torch as th
+import torchvision
+from torch.utils.data import DataLoader, TensorDataset, Dataset
+# Create pytorch tensor from X_train,y_train,X_test,y_test
+train_inputs = th.tensor(X_train,dtype=th.float)
+train_labels = th.tensor(y_train)
+test_inputs = th.tensor(X_test,dtype=th.float)
+test_labels = th.tensor(y_test)
+
+train_full = TensorDataset(train_inputs, train_labels)
+test_full = TensorDataset(test_inputs, test_labels)
+
+len(train_full)
+
+trainset_full = DataLoader(train_full, batch_size=BATCH_SIZE, shuffle=True)
+testset_full = DataLoader(test_full, batch_size=BATCH_SIZE, shuffle=False)
+
+len(trainset_full)
+
+import torch.nn as nn
+nn.Dropout(0.5)
+class Net(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        """
+        input_dim: number of input features.
+        output_dim: number of labels.
+        """
+        super(Net, self).__init__()
+        self.fc1 = th.nn.Linear(input_dim,8)
+        self.fc2 = th.nn.Linear(8,8)
+        self.fc3 = th.nn.Linear(8, output_dim)
+    def forward(self, x):
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        x = self.fc3(x)
+        return x
+
+import torch.nn.functional as F
+
+def train(model, train_loader, optimizer, epoch):
+    model.train()
+    # Iterate through each gateway's dataset
+    for idx, (data, target) in enumerate(train_loader):
+        batch_idx = idx+1
+        # Clear previous gradients (if they exist)
+        optimizer.zero_grad()
+        # Make a prediction
+        output = model(data)
+        # Calculate the cross entropy loss [We are doing classification]
+        loss = F.cross_entropy(output, target)
+        # Calculate the gradients
+        loss.backward()
+        # Update the model weights
+        optimizer.step()
+        if batch_idx==len(train_loader) or (batch_idx!=0 and batch_idx % LOG_INTERVAL == 0):
+            # get the loss back
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                epoch, batch_idx * BATCH_SIZE, len(train_loader) * BATCH_SIZE,
+                100. * batch_idx / len(train_loader), loss.item()))
+
+def test(model, test_loader):
+    model.eval()
+    correct = 0
+    with th.no_grad():
+        for data, target in test_loader:
+            # Make a prediction
+            output = model(data)
+            # Calculate the cross entropy loss
+            loss = F.cross_entropy(output, target)
+            # Get the index of the max log-probability 
+            pred = output.argmax(1, keepdim=True)
+            # Get the number of instances correctly predicted
+            correct += pred.eq(target.view_as(pred)).sum()
+            
+                
+    print('Test set: Loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        loss.item(), correct, len(test_loader)*1000,
+        100. * correct / (len(test_loader)*BATCH_SIZE)))
+
+# Commented out IPython magic to ensure Python compatibility.
+# %%time
+# import torch.optim as optim
+# 
+# # Initialize the model
+# model = Net(n_feature,n_class)
+# 
+# #Initialize the SGD optimizer
+# optimizer = optim.SGD(model.parameters(), lr=0.01)
+# 
+# for epoch in range(1, EPOCHS + 1):
+#     # Train on the training data in a federated way
+#     train(model, trainset_full, optimizer, epoch)
+#     # Check the test accuracy on unseen test data in a federated way
+#     test(model, testset_full)
+
+"""# **Training the edges**"""
+
+# Number of times we want to iterate over whole training data
+BATCH_SIZE = 1000
+EPOCHS = 20
+LOG_INTERVAL = 25
+lr = 0.01
+
+train_idx = int(len(y_train)/2)
+test_idx = int(len(y_test)/2)
+
+n_feature = X_train[:train_idx].shape[1]
+n_class = np.unique(y_train).shape[0]
+
+print("Number of training features : ",n_feature)
+print("Number of training classes : ",n_class)
+
+import torch as th
+import torchvision
+from torch.utils.data import DataLoader, TensorDataset
+
+x_gateway1 = th.tensor(X_train[:train_idx], dtype=th.float)
+y_gateway1 = th.tensor(y_train[:train_idx])
+x_gateway2 = th.tensor(X_train[train_idx:], dtype=th.float)
+y_gateway2 = th.tensor(y_train[train_idx:])
+
+test_in_gateway1 = th.tensor(X_test[:test_idx],dtype=th.float)
+test_lb_gateway1 = th.tensor(y_test[:test_idx])
+test_in_gateway2 = th.tensor(X_test[test_idx:],dtype=th.float)
+test_lb_gateway2 = th.tensor(y_test[test_idx:])
+
+x_gateway1
+
+#Gateway 1
+
+train_edge1 = TensorDataset(x_gateway1, y_gateway1)
+test_edge1 = TensorDataset(test_in_gateway1, test_lb_gateway1)
+
+trainset_edge1 = DataLoader(train_edge1, batch_size=BATCH_SIZE, shuffle=True)
+testset_edge1 = DataLoader(test_edge1, batch_size=BATCH_SIZE, shuffle=False)
+
+#Gateway 2
+
+train_edge2 = TensorDataset(x_gateway2, y_gateway2)
+test_edge2 = TensorDataset(test_in_gateway2, test_lb_gateway2)
+
+trainset_edge2 = DataLoader(train_edge2, batch_size=BATCH_SIZE, shuffle=True)
+testset_edge2 = DataLoader(test_edge2, batch_size=BATCH_SIZE, shuffle=False)
+
+len(trainset_edge2)
+
+import torch.nn as nn
+nn.Dropout(0.5)
+class Net(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        """
+        input_dim: number of input features.
+        output_dim: number of labels.
+        """
+        super(Net, self).__init__()
+        self.fc1 = th.nn.Linear(input_dim,8)
+        self.fc2 = th.nn.Linear(8,8)
+        self.fc3 = th.nn.Linear(8, output_dim)
+    def forward(self, x):
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        x = self.fc3(x)
+        return x
+
+import torch.nn.functional as F
+
+def train(model, train_loader, optimizer, epoch):
+    model.train()
+    # Iterate through each gateway's dataset
+    for idx, (data, target) in enumerate(train_loader):
+        batch_idx = idx+1
+        # Clear previous gradients (if they exist)
+        optimizer.zero_grad()
+        # Make a prediction
+        output = model(data)
+        # Calculate the cross entropy loss [We are doing classification]
+        loss = F.cross_entropy(output, target)
+        # Calculate the gradients
+        loss.backward()
+        # Update the model weights
+        optimizer.step()
+        if batch_idx==len(train_loader) or (batch_idx!=0 and batch_idx % LOG_INTERVAL == 0):
+            # get the loss back
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                epoch, batch_idx * BATCH_SIZE, len(train_loader) * BATCH_SIZE,
+                100. * batch_idx / len(train_loader), loss.item()))
+
+def test(model, test_loader):
+    model.eval()
+    correct = 0
+    with th.no_grad():
+        for data, target in test_loader:
+            # Make a prediction
+            output = model(data)
+            # Calculate the cross entropy loss
+            loss = F.cross_entropy(output, target)
+            # Get the index of the max log-probability 
+            pred = output.argmax(1, keepdim=True)
+            # Get the number of instances correctly predicted
+            correct += pred.eq(target.view_as(pred)).sum()
+            
+                
+    print('Test set: Loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        loss.item(), correct, len(test_loader)*1000,
+        100. * correct / (len(test_loader)*BATCH_SIZE)))
+
+# Commented out IPython magic to ensure Python compatibility.
+# %%time
+# import torch.optim as optim
+# 
+# # Initialize the model
+# model = Net(n_feature,n_class)
+# 
+# #Initialize the SGD optimizer
+# optimizer = optim.SGD(model.parameters(), lr=0.01)
+# 
+# for epoch in range(1, EPOCHS + 1):
+#     # Train on the training data in a federated way
+#     train(model, trainset_edge1, optimizer, epoch)
+#     # Check the test accuracy on unseen test data in a federated way
+#     test(model, testset_edge1)
+
+# Commented out IPython magic to ensure Python compatibility.
+# %%time
+# import torch.optim as optim
+# 
+# # Initialize the model
+# model = Net(n_feature,n_class)
+# 
+# #Initialize the SGD optimizer
+# optimizer = optim.SGD(model.parameters(), lr=0.01)
+# 
+# for epoch in range(1, 20 + 1):
+#     # Train on the training data in a federated way
+#     train(model, trainset_edge2, optimizer, epoch)
+#     # Check the test accuracy on unseen test data in a federated way
+#     test(model, testset_edge2)
+
+"""# **Federated Learning**"""
+
 #pip uninstall protobuf
 
 #!pip install syft
@@ -146,9 +447,14 @@ federated_test_dataset = sy.FederatedDataset([gateway1_test_dataset, gateway2_te
 federated_train_loader = sy.FederatedDataLoader(federated_train_dataset, shuffle=True, batch_size=BATCH_SIZE)
 federated_test_loader = sy.FederatedDataLoader(federated_test_dataset, shuffle=False, batch_size=BATCH_SIZE)
 
+len(federated_train_loader)
+
 """**Initialising Neural Network**"""
 
+print(n_class)
+
 import torch.nn as nn
+nn.Dropout(0.5)
 class Net(nn.Module):
     def __init__(self, input_dim, output_dim):
         """
@@ -156,15 +462,23 @@ class Net(nn.Module):
         output_dim: number of labels.
         """
         super(Net, self).__init__()
-        self.linear = th.nn.Linear(input_dim, output_dim)
+        self.fc1 = th.nn.Linear(input_dim,64)
+        self.fc2 = th.nn.Linear(64,32)
+        self.fc3 = th.nn.Linear(32,16)
+        self.fc4 = th.nn.Linear(16, output_dim)
     def forward(self, x):
-        outputs = self.linear(x)
-        return outputs
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        x = self.fc3(x)
+        x = F.relu(x)
+        x = self.fc4(x)
+        return x
 
 """**Training using Neural Network**"""
 
 import torch.nn.functional as F
-
 def train(model, device, federated_train_loader, optimizer, epoch):
     model.train()
     # Iterate through each gateway's dataset
@@ -212,6 +526,7 @@ def test(model, device, federated_test_loader):
             pred = output.argmax(1, keepdim=True)
             # Get the number of instances correctly predicted
             correct += pred.eq(target.view_as(pred)).sum().get()
+            
                 
     # get the loss back
     loss = loss.get()
@@ -227,13 +542,15 @@ def test(model, device, federated_test_loader):
 # model = Net(n_feature,n_class)
 # 
 # #Initialize the SGD optimizer
-# optimizer = optim.SGD(model.parameters(), lr=lr)
+# optimizer = optim.SGD(model.parameters(), lr=0.01)
 # 
-# for epoch in range(1, EPOCHS + 1):
+# for epoch in range(1, 20 + 1):
 #     # Train on the training data in a federated way
 #     train(model, device, federated_train_loader, optimizer, epoch)
 #     # Check the test accuracy on unseen test data in a federated way
 #     test(model, device, federated_test_loader)
+
+
 
 """# **Saving the Model and Loading it for Prediction**"""
 
