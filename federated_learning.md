@@ -160,4 +160,4 @@ That’s it. We have trained a model using the federated learning approach.
 *More Tutorial are available *[here](https://github.com/OpenMined/PySyft/tree/master/examples/tutorials)
 
 
-Download our paper on Role of [Federated Learning in IoT Anomaly Detection](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/FinalPaper.pdf)
+Download our paper on [Anomaly Detection in IoT Devices using Federated Learning](https://github.com/Jaseemck/Anomaly_Detection_App/raw/master/FinalPaper.pdf)
